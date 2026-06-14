@@ -1,6 +1,10 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BACKEND_DIR = Path(__file__).resolve().parents[1]
+REPOSITORY_ROOT = BACKEND_DIR.parent
 
 
 class Settings(BaseSettings):
@@ -10,7 +14,7 @@ class Settings(BaseSettings):
     GEMINI_MODEL: str = "gemini-2.5-flash"
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(REPOSITORY_ROOT / ".env", BACKEND_DIR / ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )

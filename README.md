@@ -9,7 +9,8 @@ committing to an idea, plan, claim, product decision, or technical design.
 This repository currently contains the `v0.1.0` Local Faultline MVP foundation:
 a FastAPI health endpoint, a React/Vite application shell, environment
 configuration, Docker Compose orchestration, and backend-only OpenAI and Gemini
-provider adapters. The final scan workflow is intentionally deferred.
+provider adapters. It also includes the two-step Faultline scanner and auditor
+workflow behind a structured backend API.
 
 ## MVP boundaries
 
@@ -22,7 +23,8 @@ The project has these non-negotiable exclusions:
 - No server-side prompt or result storage
 - No `localStorage` or `sessionStorage`
 - No provider calls during startup or health checks
-- No Faultline scan workflow yet
+- No frontend scan form yet
+- No Markdown export yet
 
 ## Architecture
 
@@ -33,6 +35,24 @@ The project has these non-negotiable exclusions:
 
 The frontend receives only `VITE_BACKEND_URL`. Provider API keys must never be
 added to frontend environment variables or source code.
+
+## Faultline API
+
+`POST /faultline/run` accepts:
+
+```json
+{
+  "input": "A plan, claim, decision, or design to stress-test",
+  "scan_mode": "business_idea",
+  "scanner_provider": "openai",
+  "auditor_provider": "gemini"
+}
+```
+
+Supported scan modes are `business_idea`, `technical_architecture`,
+`product_feature`, `security_risk_decision`, and `strategic_decision`.
+Provider calls happen only when this endpoint is invoked. Inputs, prompts, and
+results are neither logged nor stored by the application.
 
 ## Docker setup
 
