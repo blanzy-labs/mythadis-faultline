@@ -102,7 +102,7 @@ npm run dev
 ```
 
 By default, the frontend calls `http://localhost:8000`. To use another backend,
-set `VITE_BACKEND_URL` in `frontend/.env`; do not put provider keys there.
+set `VITE_API_BASE_URL` in `frontend/.env`; do not put provider keys there.
 
 ## Validation
 
