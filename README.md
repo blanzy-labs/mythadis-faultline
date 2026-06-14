@@ -23,8 +23,8 @@ The project has these non-negotiable exclusions:
 - No server-side prompt or result storage
 - No `localStorage` or `sessionStorage`
 - No provider calls during startup or health checks
-- No frontend scan form yet
-- No Markdown export yet
+- No saved report history
+- No server-side export
 
 ## Architecture
 
@@ -33,8 +33,30 @@ The project has these non-negotiable exclusions:
 - **Local orchestration:** Docker Compose
 - **Secrets:** OpenAI and Gemini keys remain backend-only
 
-The frontend receives only `VITE_BACKEND_URL`. Provider API keys must never be
+The frontend receives only `VITE_API_BASE_URL`. Provider API keys must never be
 added to frontend environment variables or source code.
+
+## Privacy and Security
+
+Mythadis Faultline is designed as a local-first MVP. It has no login or
+accounts, no database, no prompt history, no telemetry or analytics, and no
+intentional server-side prompt or report storage. The browser application does
+not use `localStorage`, `sessionStorage`, IndexedDB, or cookies.
+
+Provider API keys are read only by the backend from your local `.env` file. The
+frontend sends provider choices such as `openai` or `gemini`; it never receives
+OpenAI or Gemini API keys.
+
+When you run a scan, the submitted input travels from the browser to your local
+FastAPI backend. The backend builds the scanner and auditor prompts and sends
+them to the external providers you selected. Provider-side retention, training,
+and other data handling depend on the provider, account, and settings you
+configure. Do not submit sensitive data unless you are comfortable sending it
+to those providers.
+
+Markdown export is generated entirely in the browser from the current in-memory
+result. Faultline saves a report only when you manually download the Markdown
+file.
 
 ## Faultline API
 
@@ -131,6 +153,7 @@ curl http://localhost:8000/health
 Security checks:
 
 ```bash
+python scripts/security_checks.py
 grep -R "OPENAI_API_KEY\|GEMINI_API_KEY" frontend/src frontend/index.html frontend/package.json || true
 grep -R "localStorage\|sessionStorage" frontend/src backend/app || true
 ```
