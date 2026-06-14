@@ -8,8 +8,8 @@ committing to an idea, plan, claim, product decision, or technical design.
 
 This repository currently contains the `v0.1.0` Local Faultline MVP foundation:
 a FastAPI health endpoint, a React/Vite application shell, environment
-configuration, and Docker Compose orchestration. Provider calls and the final
-scan workflow are intentionally deferred.
+configuration, Docker Compose orchestration, and backend-only OpenAI and Gemini
+provider adapters. The final scan workflow is intentionally deferred.
 
 ## MVP boundaries
 
@@ -21,11 +21,12 @@ The project has these non-negotiable exclusions:
 - No telemetry or analytics
 - No server-side prompt or result storage
 - No `localStorage` or `sessionStorage`
-- No provider calls in this initial slice
+- No provider calls during startup or health checks
+- No Faultline scan workflow yet
 
 ## Architecture
 
-- **Backend:** Python and FastAPI, with optional provider configuration
+- **Backend:** Python and FastAPI, with async OpenAI and Gemini adapters
 - **Frontend:** React, TypeScript, and Vite
 - **Local orchestration:** Docker Compose
 - **Secrets:** OpenAI and Gemini keys remain backend-only
@@ -41,8 +42,15 @@ added to frontend environment variables or source code.
    cp .env.example .env
    ```
 
-2. Leave provider keys empty for this slice. They can be added later when
-   provider integrations exist.
+2. Provider keys are optional for startup and `/health`. Add one only when
+   exercising its provider adapter:
+
+   ```env
+   OPENAI_API_KEY=your-key
+   GEMINI_API_KEY=your-key
+   ```
+
+   Keep unused keys empty.
 
 3. Start both applications:
 
