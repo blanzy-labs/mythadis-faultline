@@ -36,6 +36,17 @@ The project has these non-negotiable exclusions:
 The frontend receives only `VITE_API_BASE_URL`. Provider API keys must never be
 added to frontend environment variables or source code.
 
+## Documentation
+
+- [Architecture](docs/architecture.md)
+- [Security and privacy](docs/security.md)
+- [Local installation](docs/local-install.md)
+- [Demo script](docs/demo-script.md)
+- [Prompt design](docs/prompt-design.md)
+- [Sample report](docs/sample-report.md)
+- [Contributor security notes](docs/security-notes.md)
+- [Contributing](CONTRIBUTING.md)
+
 ## Privacy and Security
 
 Mythadis Faultline is designed as a local-first MVP. It has no login or
@@ -57,6 +68,19 @@ to those providers.
 Markdown export is generated entirely in the browser from the current in-memory
 result. Faultline saves a report only when you manually download the Markdown
 file.
+
+## Mythadis Labs Tie-In
+
+Mythadis Faultline is App #3 in the Mythadis Labs open-source project series.
+It turns a theme from the broader Mythadis / Second Presence creative universe
+into a practical tool: hidden flaws, brittle systems, weak assumptions, and
+control failures often become visible only when pressure exposes them.
+
+Faultline is real-world focused and designed to expose those cracks earlier.
+
+> The books are fiction. The questions are real.
+>
+> Find the crack before the collapse.
 
 ## Faultline API
 

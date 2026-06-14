@@ -28,6 +28,36 @@ DEPENDENCY_FILES = [
     ROOT / "backend" / "requirements.txt",
     ROOT / "frontend" / "package.json",
 ]
+DOCUMENTATION_REQUIREMENTS = {
+    ROOT / "docs" / "architecture.md": ["Faultline workflow"],
+    ROOT / "docs" / "security.md": ["provider"],
+    ROOT / "docs" / "local-install.md": ["docker compose up --build"],
+    ROOT / "docs" / "demo-script.md": ["60–90"],
+    ROOT / "CONTRIBUTING.md": ["Do not commit .env"],
+    ROOT / ".github" / "ISSUE_TEMPLATE" / "bug_report.md": [
+        "Do not paste",
+        "secrets",
+    ],
+    ROOT / ".github" / "ISSUE_TEMPLATE" / "feature_request.md": [
+        "Do not paste",
+        "secrets",
+    ],
+    ROOT / ".github" / "ISSUE_TEMPLATE" / "prompt_improvement.md": [
+        "Do not",
+        "secrets",
+    ],
+}
+DOCUMENTATION_FILES = [
+    ROOT / "README.md",
+    ROOT / "CONTRIBUTING.md",
+    ROOT / "docs",
+    ROOT / ".github" / "ISSUE_TEMPLATE",
+]
+FORBIDDEN_DOCUMENTATION_CLAIMS = [
+    r"\bbrowsed the web\b",
+    r"\bverified facts online\b",
+    r"\bstored prompt history\b",
+]
 
 KEY_ENV_NAMES = [
     f"{provider}_{suffix}"
@@ -82,6 +112,7 @@ def main() -> int:
     check_forbidden_app_patterns(failures)
     check_dependency_boundaries(failures)
     check_backend_file_writes(failures)
+    check_documentation(failures)
     check_tracked_secret_values(failures)
 
     if failures:
@@ -95,6 +126,7 @@ def main() -> int:
     print("- Secret-bearing env files are ignored and untracked.")
     print("- Provider key names and values are absent from frontend source.")
     print("- No browser storage, database, analytics, or backend file writes found.")
+    print("- Required documentation and contributor templates are present and safe.")
     print("- No obvious provider key values found in repository files.")
     return 0
 
@@ -187,6 +219,29 @@ def check_backend_file_writes(failures: list[str]) -> None:
         [ROOT / "backend" / "app"],
         BACKEND_WRITE_PATTERNS,
         "Backend file-write operation",
+        failures,
+    )
+
+
+def check_documentation(failures: list[str]) -> None:
+    for path, required_phrases in DOCUMENTATION_REQUIREMENTS.items():
+        if not path.is_file():
+            failures.append(f"Required documentation is missing: {path.relative_to(ROOT)}")
+            continue
+
+        content = path.read_text(encoding="utf-8")
+        normalized_content = content.casefold()
+        for phrase in required_phrases:
+            if phrase.casefold() not in normalized_content:
+                failures.append(
+                    f"Required documentation phrase is missing from "
+                    f"{path.relative_to(ROOT)}: {phrase}"
+                )
+
+    scan_patterns(
+        DOCUMENTATION_FILES,
+        FORBIDDEN_DOCUMENTATION_CLAIMS,
+        "Forbidden documentation claim",
         failures,
     )
 
