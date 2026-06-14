@@ -53,6 +53,9 @@ describe("App", () => {
     expect(
       screen.getByRole("button", { name: "Run Faultline Scan" }),
     ).toBeDisabled();
+    expect(
+      screen.queryByRole("button", { name: "Download Markdown Report" }),
+    ).not.toBeInTheDocument();
   });
 
   it("sends selected values and disables controls while loading", async () => {
@@ -152,8 +155,45 @@ describe("App", () => {
       screen.getByRole("heading", { name: "Validation Tests" }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /export/i }),
-    ).not.toBeInTheDocument();
+      screen.getByRole("button", { name: "Download Markdown Report" }),
+    ).toBeInTheDocument();
+  });
+
+  it("downloads the current result as Markdown in the browser", async () => {
+    const user = userEvent.setup();
+    const createObjectURL = vi.fn().mockReturnValue("blob:current-report");
+    const revokeObjectURL = vi.fn();
+    const anchorClick = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => undefined);
+    vi.stubGlobal("URL", { createObjectURL, revokeObjectURL });
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(response({ status: "ok" }))
+        .mockResolvedValueOnce(response(fakeScanResponse)),
+    );
+    render(<App />);
+
+    await user.type(
+      screen.getByLabelText(
+        "Idea, plan, claim, decision, or design to stress-test",
+      ),
+      "Launch a focused local-first product",
+    );
+    await user.click(
+      screen.getByRole("button", { name: "Run Faultline Scan" }),
+    );
+    await user.click(
+      await screen.findByRole("button", {
+        name: "Download Markdown Report",
+      }),
+    );
+
+    expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    expect(anchorClick).toHaveBeenCalledOnce();
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:current-report");
   });
 
   it("shows a safe backend unavailable error", async () => {

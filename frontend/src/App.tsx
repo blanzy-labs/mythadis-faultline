@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { checkBackendHealth, runFaultlineScan, ScanApiError } from "./api";
 import { AuditReview } from "./components/AuditReview";
 import { ErrorMessage } from "./components/ErrorMessage";
+import { ExportButton } from "./components/ExportButton";
 import { FaultlineReport } from "./components/FaultlineReport";
 import { LoadingState } from "./components/LoadingState";
 import { ModelsUsed } from "./components/ModelsUsed";
@@ -116,6 +117,13 @@ function App() {
 
       {result && (
         <section className="results-area" aria-label="Faultline scan results">
+          <div className="results-toolbar">
+            <div>
+              <p className="section-kicker">Current in-memory result</p>
+              <p>Download this report before starting another scan.</p>
+            </div>
+            <ExportButton result={result} />
+          </div>
           <FaultlineReport report={result.scanner_report} />
           <AuditReview report={result.audit_report} />
           <ModelsUsed models={result.models_used} />

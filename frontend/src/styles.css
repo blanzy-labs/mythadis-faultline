@@ -475,6 +475,49 @@ select {
   margin-top: 32px;
 }
 
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  background: rgba(10, 17, 22, 0.78);
+}
+
+.results-toolbar p {
+  margin: 0;
+}
+
+.results-toolbar p:last-child {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.export-button {
+  min-height: 44px;
+  flex: 0 0 auto;
+  padding: 0 18px;
+  border: 1px solid var(--green);
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition:
+    color 160ms ease,
+    background 160ms ease;
+}
+
+.export-button:hover {
+  background: var(--green);
+  color: #03100c;
+}
+
 .report-panel {
   overflow: hidden;
 }
@@ -713,6 +756,7 @@ select {
 
   .field-heading,
   .report-header,
+  .results-toolbar,
   .models-grid p,
   .site-footer {
     align-items: flex-start;
@@ -733,5 +777,9 @@ select {
 
   .metric-badge {
     align-self: flex-start;
+  }
+
+  .export-button {
+    width: 100%;
   }
 }
