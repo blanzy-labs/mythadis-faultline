@@ -81,11 +81,13 @@ def test_response_schema_accepts_valid_reports() -> None:
 def test_all_v1_scan_modes_are_defined() -> None:
     assert set(SCAN_MODES) == set(ScanModeId)
     assert len(SCAN_MODES) == 5
+    assert len({mode.id for mode in SCAN_MODES.values()}) == len(SCAN_MODES)
     for mode in SCAN_MODES.values():
         assert mode.id
         assert mode.label
         assert mode.description
-        assert mode.guidance
+        assert mode.scanner_guidance.strip()
+        assert mode.auditor_guidance.strip()
 
 
 def test_scan_mode_lookup_accepts_normalized_value() -> None:

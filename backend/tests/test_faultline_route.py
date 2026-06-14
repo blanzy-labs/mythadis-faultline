@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 
 from app.config import Settings, get_settings
 from app.faultline.routes import get_provider_factory
+from app.faultline.schemas import AuditReport, ScannerReport
 from app.main import app
 from app.providers import BaseProvider, ProviderCallError
 from tests.faultline_fixtures import AUDITOR_JSON, SCANNER_JSON
@@ -46,6 +47,8 @@ def test_faultline_route_returns_structured_response() -> None:
     assert payload["scan_mode"] == "business_idea"
     assert payload["scanner_report"]["risk_level"] == "high"
     assert payload["audit_report"]["auditor_confidence"] == "high"
+    assert set(payload["scanner_report"]) == set(ScannerReport.model_fields)
+    assert set(payload["audit_report"]) == set(AuditReport.model_fields)
     assert payload["models_used"] == {
         "scanner_provider": "openai",
         "scanner_model": "route-scanner-model",
