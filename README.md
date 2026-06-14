@@ -6,11 +6,11 @@ Mythadis Faultline is a local-first analysis tool for exposing hidden
 assumptions, pressure points, weak evidence, and collapse risks before
 committing to an idea, plan, claim, product decision, or technical design.
 
-This repository currently contains the `v0.1.0` Local Faultline MVP foundation:
-a FastAPI health endpoint, a React/Vite application shell, environment
-configuration, Docker Compose orchestration, and backend-only OpenAI and Gemini
-provider adapters. It also includes the two-step Faultline scanner and auditor
-workflow behind a structured backend API.
+**Release target:** `v0.1.0 - Local Faultline MVP`
+
+The MVP includes a FastAPI backend, React/Vite frontend, Docker Compose,
+backend-only OpenAI and Gemini adapters, a structured Primary Scanner, an
+Independent Auditor, five scan modes, and browser-side Markdown export.
 
 ## MVP boundaries
 
@@ -36,6 +36,14 @@ The project has these non-negotiable exclusions:
 The frontend receives only `VITE_API_BASE_URL`. Provider API keys must never be
 added to frontend environment variables or source code.
 
+### Supported Providers and Default Models
+
+- OpenAI: `gpt-4.1-mini`
+- Gemini: `gemini-2.5-flash`
+
+Model names can be overridden in the backend environment. Availability, cost,
+and account access are controlled by the selected provider.
+
 ## Documentation
 
 - [Architecture](docs/architecture.md)
@@ -45,6 +53,8 @@ added to frontend environment variables or source code.
 - [Prompt design](docs/prompt-design.md)
 - [Sample report](docs/sample-report.md)
 - [Contributor security notes](docs/security-notes.md)
+- [v0.1.0 release notes](docs/release-notes-v0.1.0.md)
+- [Release checklist](docs/release-checklist.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Privacy and Security
@@ -112,11 +122,13 @@ results are neither logged nor stored by the application.
    exercising its provider adapter:
 
    ```env
-   OPENAI_API_KEY=your-key
-   GEMINI_API_KEY=your-key
+   OPENAI_API_KEY=
+   GEMINI_API_KEY=
+   OPENAI_MODEL=gpt-4.1-mini
+   GEMINI_MODEL=gemini-2.5-flash
    ```
 
-   Keep unused keys empty.
+   Add real keys only to the ignored local `.env`. Keep unused keys empty.
 
 3. Start both applications:
 
@@ -165,6 +177,7 @@ Frontend build:
 cd frontend
 npm install
 npm run build
+npm test -- --run
 ```
 
 Service checks:
@@ -178,6 +191,7 @@ Security checks:
 
 ```bash
 python scripts/security_checks.py
+python scripts/release_check.py
 grep -R "OPENAI_API_KEY\|GEMINI_API_KEY" frontend/src frontend/index.html frontend/package.json || true
 grep -R "localStorage\|sessionStorage" frontend/src backend/app || true
 ```

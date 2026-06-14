@@ -33,6 +33,14 @@ DOCUMENTATION_REQUIREMENTS = {
     ROOT / "docs" / "security.md": ["provider"],
     ROOT / "docs" / "local-install.md": ["docker compose up --build"],
     ROOT / "docs" / "demo-script.md": ["60–90"],
+    ROOT / "docs" / "release-notes-v0.1.0.md": [
+        "Local Faultline MVP",
+        "external providers",
+    ],
+    ROOT / "docs" / "release-checklist.md": [
+        "Release Commands",
+        "scripts/release_check.py",
+    ],
     ROOT / "CONTRIBUTING.md": ["Do not commit .env"],
     ROOT / ".github" / "ISSUE_TEMPLATE" / "bug_report.md": [
         "Do not paste",
