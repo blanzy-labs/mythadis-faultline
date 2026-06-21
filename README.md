@@ -55,6 +55,7 @@ and account access are controlled by the selected provider.
 - [Contributor security notes](docs/security-notes.md)
 - [v0.1.0 release notes](docs/release-notes-v0.1.0.md)
 - [Release checklist](docs/release-checklist.md)
+- [Disclaimer](docs/disclaimer.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Privacy and Security
