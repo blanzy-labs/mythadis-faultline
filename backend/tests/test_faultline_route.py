@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from app.config import Settings, get_settings
@@ -14,6 +15,20 @@ class FakeProvider(BaseProvider):
 
     async def generate(self, prompt: str) -> str:
         return self.response
+
+
+def route_settings() -> Settings:
+    return Settings(
+        _env_file=None,
+        OPENAI_API_KEY="route-openai-key-should-not-leak",
+        GEMINI_API_KEY="route-gemini-key-should-not-leak",
+        OPENAI_MODEL="route-openai-model",
+        GEMINI_MODEL="route-gemini-model",
+        LOCAL_LLM_ENABLED=True,
+        LOCAL_LLM_BASE_URL="http://localhost:11434/v1",
+        LOCAL_LLM_MODEL="route-local-model",
+        LOCAL_LLM_API_KEY="route-local-key-should-not-leak",
+    )
 
 
 def test_faultline_route_returns_structured_response() -> None:
@@ -92,6 +107,82 @@ def test_faultline_route_reports_local_model_when_selected() -> None:
         "auditor_provider": "gemini",
         "auditor_model": "route-auditor-model",
     }
+
+
+@pytest.mark.parametrize(
+    (
+        "scanner_provider",
+        "auditor_provider",
+        "expected_scanner_model",
+        "expected_auditor_model",
+    ),
+    [
+        (
+            "openai_compatible",
+            "gemini",
+            "route-local-model",
+            "route-gemini-model",
+        ),
+        (
+            "openai",
+            "openai_compatible",
+            "route-openai-model",
+            "route-local-model",
+        ),
+        (
+            "openai_compatible",
+            "openai_compatible",
+            "route-local-model",
+            "route-local-model",
+        ),
+    ],
+)
+def test_faultline_route_supports_mocked_local_provider_combinations(
+    scanner_provider: str,
+    auditor_provider: str,
+    expected_scanner_model: str,
+    expected_auditor_model: str,
+) -> None:
+    calls: list[str] = []
+
+    def factory(name: str, settings: Settings) -> BaseProvider:
+        calls.append(name)
+        return FakeProvider(SCANNER_JSON if len(calls) == 1 else AUDITOR_JSON)
+
+    app.dependency_overrides[get_provider_factory] = lambda: factory
+    app.dependency_overrides[get_settings] = route_settings
+    try:
+        response = TestClient(app).post(
+            "/faultline/run",
+            json={
+                "input": "A business concept",
+                "scan_mode": "business_idea",
+                "scanner_provider": scanner_provider,
+                "auditor_provider": auditor_provider,
+            },
+        )
+    finally:
+        app.dependency_overrides.clear()
+
+    assert calls == [scanner_provider, auditor_provider]
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["input"] == "A business concept"
+    assert payload["scan_mode"] == "business_idea"
+    assert set(payload["scanner_report"]) == set(ScannerReport.model_fields)
+    assert set(payload["audit_report"]) == set(AuditReport.model_fields)
+    assert payload["models_used"] == {
+        "scanner_provider": scanner_provider,
+        "scanner_model": expected_scanner_model,
+        "auditor_provider": auditor_provider,
+        "auditor_model": expected_auditor_model,
+    }
+
+    serialized = response.text
+    assert "route-local-key-should-not-leak" not in serialized
+    assert "route-openai-key-should-not-leak" not in serialized
+    assert "route-gemini-key-should-not-leak" not in serialized
+    assert "http://localhost:11434/v1" not in serialized
 
 
 def test_faultline_route_rejects_invalid_request() -> None:

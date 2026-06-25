@@ -63,6 +63,18 @@ def test_empty_api_key_uses_safe_internal_placeholder() -> None:
     assert provider.api_key == LOCAL_API_KEY_PLACEHOLDER
 
 
+def test_timeout_defaults_to_120_seconds() -> None:
+    provider = OpenAICompatibleProvider(make_settings(LOCAL_LLM_TIMEOUT_SECONDS=120))
+
+    assert provider.timeout_seconds == 120
+
+
+def test_timeout_can_be_overridden() -> None:
+    provider = OpenAICompatibleProvider(make_settings(LOCAL_LLM_TIMEOUT_SECONDS=30))
+
+    assert provider.timeout_seconds == 30
+
+
 def test_configured_api_key_is_used_internally() -> None:
     provider = OpenAICompatibleProvider(
         make_settings(LOCAL_LLM_API_KEY=LOCAL_FAKE_KEY)
@@ -98,6 +110,32 @@ async def test_mocked_empty_local_response_raises_safe_error(monkeypatch) -> Non
         match=r"^Local LLM provider returned an empty response\.$",
     ):
         await provider.generate(PROMPT_TEXT)
+
+
+@pytest.mark.asyncio
+async def test_mocked_malformed_local_response_raises_safe_error(monkeypatch) -> None:
+    provider = OpenAICompatibleProvider(
+        make_settings(LOCAL_LLM_API_KEY=LOCAL_FAKE_KEY)
+    )
+    raw_response_dump = {
+        "api_key": LOCAL_FAKE_KEY,
+        "prompt": PROMPT_TEXT,
+        "unexpected": "not text",
+    }
+
+    async def mock_call(prompt: str) -> object:
+        return raw_response_dump
+
+    monkeypatch.setattr(provider, "_call_provider", mock_call)
+
+    with pytest.raises(ProviderCallError) as exc_info:
+        await provider.generate(PROMPT_TEXT)
+
+    message = str(exc_info.value)
+    assert message == "Local LLM provider returned an empty response."
+    assert LOCAL_FAKE_KEY not in message
+    assert PROMPT_TEXT not in message
+    assert "unexpected" not in message
 
 
 @pytest.mark.asyncio

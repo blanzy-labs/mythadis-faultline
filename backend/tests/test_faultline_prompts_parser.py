@@ -71,14 +71,27 @@ def test_auditor_prompt_contract_matches_schema_fields() -> None:
 
 
 @pytest.mark.parametrize(
-    "raw_response",
+    ("case_name", "raw_response"),
     [
-        SCANNER_JSON,
-        f"```json\n{SCANNER_JSON}\n```",
-        f"Scanner result follows:\n{SCANNER_JSON}\nEnd of result.",
+        ("valid_json", SCANNER_JSON),
+        ("markdown_fence", f"```\n{SCANNER_JSON}\n```"),
+        ("json_fence", f"```json\n{SCANNER_JSON}\n```"),
+        ("text_before_json", f"Scanner result follows:\n{SCANNER_JSON}"),
+        ("text_after_json", f"{SCANNER_JSON}\nEnd of result."),
+        (
+            "text_before_and_after_json",
+            f"Scanner result follows:\n{SCANNER_JSON}\nEnd of result.",
+        ),
+        (
+            "unsupported_extra_field",
+            json.dumps({**SCANNER_PAYLOAD, "local_model_note": "ignored"}),
+        ),
     ],
 )
-def test_scanner_parser_recovers_common_json_formats(raw_response: str) -> None:
+def test_scanner_parser_recovers_common_json_formats(
+    case_name: str,
+    raw_response: str,
+) -> None:
     report = parse_scanner_report(raw_response)
 
     assert report.faultline_summary == SCANNER_PAYLOAD["faultline_summary"]
@@ -94,13 +107,22 @@ def test_scanner_parser_uses_defaults_for_missing_fields() -> None:
 
 
 @pytest.mark.parametrize(
-    "raw_response",
+    ("case_name", "raw_response"),
     [
-        "not json",
-        json.dumps({**SCANNER_PAYLOAD, "risk_level": "extreme"}),
+        ("overly_chatty_non_json", "I can help! Here is a broad risk review."),
+        (
+            "partial_json",
+            '{"faultline_summary": "Half done", "risk_level": "medium"',
+        ),
+        ("empty_string", ""),
+        (
+            "invalid_risk_level",
+            json.dumps({**SCANNER_PAYLOAD, "risk_level": "extreme"}),
+        ),
     ],
 )
 def test_scanner_parser_returns_fallback_for_invalid_output(
+    case_name: str,
     raw_response: str,
 ) -> None:
     report = parse_scanner_report(raw_response)
@@ -109,17 +131,32 @@ def test_scanner_parser_returns_fallback_for_invalid_output(
     assert report.collapse_risks == [
         "Scanner output was malformed or incomplete."
     ]
+    if raw_response:
+        assert raw_response[:30] not in report.faultline_summary
 
 
 @pytest.mark.parametrize(
-    "raw_response",
+    ("case_name", "raw_response"),
     [
-        AUDITOR_JSON,
-        f"```json\n{AUDITOR_JSON}\n```",
-        f"Audit result:\n{AUDITOR_JSON}\nReview complete.",
+        ("valid_json", AUDITOR_JSON),
+        ("markdown_fence", f"```\n{AUDITOR_JSON}\n```"),
+        ("json_fence", f"```json\n{AUDITOR_JSON}\n```"),
+        ("text_before_json", f"Audit result:\n{AUDITOR_JSON}"),
+        ("text_after_json", f"{AUDITOR_JSON}\nReview complete."),
+        (
+            "text_before_and_after_json",
+            f"Audit result:\n{AUDITOR_JSON}\nReview complete.",
+        ),
+        (
+            "unsupported_extra_field",
+            json.dumps({**AUDITOR_PAYLOAD, "local_model_note": "ignored"}),
+        ),
     ],
 )
-def test_auditor_parser_recovers_common_json_formats(raw_response: str) -> None:
+def test_auditor_parser_recovers_common_json_formats(
+    case_name: str,
+    raw_response: str,
+) -> None:
     report = parse_audit_report(raw_response)
 
     assert report.audit_summary == AUDITOR_PAYLOAD["audit_summary"]
@@ -135,16 +172,44 @@ def test_auditor_parser_uses_defaults_for_missing_fields() -> None:
 
 
 @pytest.mark.parametrize(
-    "raw_response",
+    ("case_name", "raw_response"),
     [
-        "{broken",
-        json.dumps({**AUDITOR_PAYLOAD, "auditor_confidence": "certain"}),
+        ("overly_chatty_non_json", "Looks good overall, with a few caveats."),
+        (
+            "partial_json",
+            '{"audit_summary": "Half done", "auditor_confidence": "medium"',
+        ),
+        ("empty_string", ""),
+        (
+            "invalid_auditor_confidence",
+            json.dumps({**AUDITOR_PAYLOAD, "auditor_confidence": "certain"}),
+        ),
     ],
 )
 def test_auditor_parser_returns_fallback_for_invalid_output(
+    case_name: str,
     raw_response: str,
 ) -> None:
     report = parse_audit_report(raw_response)
 
     assert report.auditor_confidence == "low"
     assert report.missed_risks == ["Auditor output was malformed or incomplete."]
+    if raw_response:
+        assert raw_response[:30] not in report.audit_summary
+
+
+def test_risk_and_confidence_scales_remain_constrained() -> None:
+    scanner_schema = ScannerReport.model_json_schema()
+    auditor_schema = AuditReport.model_json_schema()
+
+    assert scanner_schema["properties"]["risk_level"]["enum"] == [
+        "low",
+        "medium",
+        "high",
+        "critical",
+    ]
+    assert auditor_schema["properties"]["auditor_confidence"]["enum"] == [
+        "low",
+        "medium",
+        "high",
+    ]

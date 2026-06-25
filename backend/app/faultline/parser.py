@@ -70,6 +70,8 @@ def _parse_report(
     fallback_factory: Callable[[], ReportT],
 ) -> ReportT:
     try:
+        # Local models can be chatty or partially structured; fallback keeps
+        # malformed output from escaping into API errors or reports.
         payload = _extract_json_object(raw_response)
         return report_type.model_validate(payload)
     except (TypeError, ValueError, json.JSONDecodeError, ValidationError):
