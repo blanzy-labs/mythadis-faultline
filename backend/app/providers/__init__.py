@@ -7,11 +7,13 @@ from app.providers.errors import (
 )
 from app.providers.factory import get_provider
 from app.providers.gemini_provider import GeminiProvider
+from app.providers.openai_compatible_provider import OpenAICompatibleProvider
 from app.providers.openai_provider import OpenAIProvider
 
 __all__ = [
     "BaseProvider",
     "GeminiProvider",
+    "OpenAICompatibleProvider",
     "OpenAIProvider",
     "ProviderCallError",
     "ProviderConfigError",

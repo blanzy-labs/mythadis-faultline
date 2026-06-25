@@ -9,6 +9,7 @@ from app.faultline.modes import ScanModeId
 class ProviderName(StrEnum):
     OPENAI = "openai"
     GEMINI = "gemini"
+    OPENAI_COMPATIBLE = "openai_compatible"
 
 
 class ScanRequest(BaseModel):

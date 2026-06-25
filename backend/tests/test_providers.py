@@ -5,6 +5,7 @@ import pytest
 from app.config import Settings
 from app.providers import (
     GeminiProvider,
+    OpenAICompatibleProvider,
     OpenAIProvider,
     ProviderCallError,
     ProviderConfigError,
@@ -30,17 +31,27 @@ def make_settings(**overrides: str) -> Settings:
     [
         ("openai", OpenAIProvider),
         ("gemini", GeminiProvider),
+        ("openai_compatible", OpenAICompatibleProvider),
         ("OPENAI", OpenAIProvider),
         (" Gemini ", GeminiProvider),
+        (" OPENAI_COMPATIBLE ", OpenAICompatibleProvider),
     ],
 )
 def test_factory_returns_supported_provider(
     name: str,
-    expected_type: type[OpenAIProvider] | type[GeminiProvider],
+    expected_type: type[OpenAIProvider]
+    | type[GeminiProvider]
+    | type[OpenAICompatibleProvider],
 ) -> None:
     provider = get_provider(name, make_settings())
 
     assert isinstance(provider, expected_type)
+
+
+def test_factory_does_not_require_local_llm_config() -> None:
+    provider = get_provider("openai_compatible", make_settings())
+
+    assert isinstance(provider, OpenAICompatibleProvider)
 
 
 def test_factory_rejects_unsupported_provider() -> None:

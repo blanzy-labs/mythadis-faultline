@@ -13,6 +13,13 @@ EXPECTED_ENV_EXAMPLE = [
     "GEMINI_API_KEY=",
     "OPENAI_MODEL=gpt-4.1-mini",
     "GEMINI_MODEL=gemini-2.5-flash",
+    "",
+    "# Local/OpenAI-compatible LLM provider, optional",
+    "LOCAL_LLM_ENABLED=false",
+    "LOCAL_LLM_BASE_URL=http://localhost:11434/v1",
+    "LOCAL_LLM_MODEL=llama3.1:8b",
+    "LOCAL_LLM_API_KEY=",
+    "LOCAL_LLM_TIMEOUT_SECONDS=120",
 ]
 
 FRONTEND_FILES = [
@@ -71,6 +78,15 @@ KEY_ENV_NAMES = [
     f"{provider}_{suffix}"
     for provider in ("OPENAI", "GEMINI")
     for suffix in ("API_KEY",)
+]
+LOCAL_LLM_FRONTEND_ENV_NAMES = [
+    "LOCAL_LLM_BASE_URL",
+    "LOCAL_LLM_API_KEY",
+    "LOCAL_LLM_MODEL",
+    "LOCAL_LLM_TIMEOUT_SECONDS",
+    "VITE_LOCAL_LLM_BASE_URL",
+    "VITE_LOCAL_LLM_API_KEY",
+    "VITE_LOCAL_LLM_MODEL",
 ]
 VITE_KEY_PREFIXES = [f"VITE_{provider}" for provider in ("OPENAI", "GEMINI")]
 STORAGE_PATTERNS = [
@@ -187,7 +203,12 @@ def check_git_env_safety(failures: list[str]) -> None:
 
 
 def check_frontend_key_boundary(failures: list[str]) -> None:
-    patterns = [re.escape(name) for name in KEY_ENV_NAMES + VITE_KEY_PREFIXES]
+    patterns = [
+        re.escape(name)
+        for name in KEY_ENV_NAMES
+        + VITE_KEY_PREFIXES
+        + LOCAL_LLM_FRONTEND_ENV_NAMES
+    ]
     scan_patterns(
         FRONTEND_FILES,
         patterns,

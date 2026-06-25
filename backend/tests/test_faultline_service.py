@@ -58,6 +58,41 @@ async def test_workflow_uses_selected_providers_in_order() -> None:
     assert response.scanner_report.faultline_summary in calls[1][1]
 
 
+@pytest.mark.parametrize(
+    ("scanner_provider", "auditor_provider", "expected_scanner", "expected_auditor"),
+    [
+        ("openai_compatible", "gemini", "local-model", "auditor-model"),
+        ("openai", "openai_compatible", "scanner-model", "local-model"),
+        ("openai_compatible", "openai_compatible", "local-model", "local-model"),
+    ],
+)
+async def test_workflow_reports_local_model_for_openai_compatible_provider(
+    scanner_provider: str,
+    auditor_provider: str,
+    expected_scanner: str,
+    expected_auditor: str,
+) -> None:
+    def factory(name: str, settings: Settings) -> BaseProvider:
+        response = SCANNER_JSON if name == scanner_provider else AUDITOR_JSON
+        return FakeProvider(response, [], name)
+
+    response = await run_faultline(
+        ScanRequest(
+            input="A business concept",
+            scan_mode="business_idea",
+            scanner_provider=scanner_provider,
+            auditor_provider=auditor_provider,
+        ),
+        make_settings(LOCAL_LLM_MODEL="local-model"),
+        factory,
+    )
+
+    assert response.models_used.scanner_provider == scanner_provider
+    assert response.models_used.scanner_model == expected_scanner
+    assert response.models_used.auditor_provider == auditor_provider
+    assert response.models_used.auditor_model == expected_auditor
+
+
 async def test_scanner_fallback_still_runs_auditor() -> None:
     calls: list[tuple[str, str]] = []
 

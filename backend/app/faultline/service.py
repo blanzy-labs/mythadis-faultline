@@ -86,4 +86,6 @@ async def run_faultline(
 def _model_for_provider(provider_name: ProviderName, settings: Settings) -> str:
     if provider_name == ProviderName.OPENAI:
         return settings.OPENAI_MODEL
+    if provider_name == ProviderName.OPENAI_COMPATIBLE:
+        return settings.LOCAL_LLM_MODEL
     return settings.GEMINI_MODEL

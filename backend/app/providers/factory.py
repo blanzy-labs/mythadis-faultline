@@ -2,6 +2,7 @@ from app.config import Settings
 from app.providers.base import BaseProvider
 from app.providers.errors import UnsupportedProviderError
 from app.providers.gemini_provider import GeminiProvider
+from app.providers.openai_compatible_provider import OpenAICompatibleProvider
 from app.providers.openai_provider import OpenAIProvider
 
 
@@ -12,5 +13,7 @@ def get_provider(name: str, settings: Settings) -> BaseProvider:
         return OpenAIProvider(settings)
     if normalized_name == "gemini":
         return GeminiProvider(settings)
+    if normalized_name == "openai_compatible":
+        return OpenAICompatibleProvider(settings)
 
     raise UnsupportedProviderError(f"Unsupported provider: {name}.")

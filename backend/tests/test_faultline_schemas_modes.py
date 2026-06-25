@@ -36,6 +36,18 @@ def test_valid_request_is_normalized() -> None:
     assert request.auditor_provider == "gemini"
 
 
+def test_openai_compatible_provider_name_is_valid() -> None:
+    request = ScanRequest(
+        input="A focused business idea",
+        scan_mode="business_idea",
+        scanner_provider="openai_compatible",
+        auditor_provider="openai_compatible",
+    )
+
+    assert request.scanner_provider == "openai_compatible"
+    assert request.auditor_provider == "openai_compatible"
+
+
 @pytest.mark.parametrize("invalid_input", ["", "   "])
 def test_empty_input_is_rejected(invalid_input: str) -> None:
     with pytest.raises(ValidationError):

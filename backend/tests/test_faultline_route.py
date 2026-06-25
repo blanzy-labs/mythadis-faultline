@@ -57,6 +57,43 @@ def test_faultline_route_returns_structured_response() -> None:
     }
 
 
+def test_faultline_route_reports_local_model_when_selected() -> None:
+    def factory(name: str, settings: Settings) -> BaseProvider:
+        return FakeProvider(
+            SCANNER_JSON if name == "openai_compatible" else AUDITOR_JSON
+        )
+
+    app.dependency_overrides[get_provider_factory] = lambda: factory
+    app.dependency_overrides[get_settings] = lambda: Settings(
+        _env_file=None,
+        OPENAI_API_KEY="",
+        GEMINI_API_KEY="",
+        OPENAI_MODEL="route-scanner-model",
+        GEMINI_MODEL="route-auditor-model",
+        LOCAL_LLM_MODEL="route-local-model",
+    )
+    try:
+        response = TestClient(app).post(
+            "/faultline/run",
+            json={
+                "input": "A business concept",
+                "scan_mode": "business_idea",
+                "scanner_provider": "openai_compatible",
+                "auditor_provider": "gemini",
+            },
+        )
+    finally:
+        app.dependency_overrides.clear()
+
+    assert response.status_code == 200
+    assert response.json()["models_used"] == {
+        "scanner_provider": "openai_compatible",
+        "scanner_model": "route-local-model",
+        "auditor_provider": "gemini",
+        "auditor_model": "route-auditor-model",
+    }
+
+
 def test_faultline_route_rejects_invalid_request() -> None:
     response = TestClient(app).post(
         "/faultline/run",
