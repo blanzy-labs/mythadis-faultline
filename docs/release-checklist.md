@@ -108,8 +108,8 @@ Use `python3` when the host does not provide a `python` command.
 Perform this manually in a separate temporary directory when practical:
 
 ```bash
-git clone https://github.com/blanzy-labs/mythadis-faultline.git
-cd mythadis-faultline
+git clone https://github.com/blanzy-labs/ai-faultline.git
+cd ai-faultline
 cp .env.example .env
 # Optionally add provider keys to the ignored .env.
 docker compose up --build

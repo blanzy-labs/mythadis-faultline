@@ -87,8 +87,8 @@ downloads it. There is no server-side export endpoint or saved report list.
 ## How to Run Locally
 
 ```bash
-git clone https://github.com/blanzy-labs/mythadis-faultline.git
-cd mythadis-faultline
+git clone https://github.com/blanzy-labs/ai-faultline.git
+cd ai-faultline
 cp .env.example .env
 docker compose up --build
 ```

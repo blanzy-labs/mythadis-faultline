@@ -13,8 +13,8 @@ Provider keys are optional for startup, `/health`, builds, and automated tests.
 ## Clone the Repo
 
 ```bash
-git clone https://github.com/blanzy-labs/mythadis-faultline.git
-cd mythadis-faultline
+git clone https://github.com/blanzy-labs/ai-faultline.git
+cd ai-faultline
 ```
 
 ## Configure `.env`
