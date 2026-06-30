@@ -2,7 +2,7 @@
 
 ## Security Posture Summary
 
-Mythadis Faultline is a local-first MVP with a deliberately small data surface.
+AI Faultline is a local-first MVP with a deliberately small data surface.
 It has no accounts, database, prompt history, telemetry, analytics, saved
 reports, or server-side export endpoint. The current scan exists in application
 memory only until it is replaced or the process/page ends.

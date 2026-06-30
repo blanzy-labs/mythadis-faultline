@@ -27,7 +27,7 @@ describe("App", () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: "Mythadis Faultline" }),
+      screen.getByRole("heading", { name: "AI Faultline" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Find the crack before the collapse."),

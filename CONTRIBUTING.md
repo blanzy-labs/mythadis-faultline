@@ -1,6 +1,6 @@
-# Contributing to Mythadis Faultline
+# Contributing to AI Faultline
 
-Thank you for helping improve Mythadis Faultline. Keep changes focused,
+Thank you for helping improve AI Faultline. Keep changes focused,
 testable, and consistent with the local-first MVP.
 
 ## Project Scope

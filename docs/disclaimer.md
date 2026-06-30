@@ -1,6 +1,6 @@
-## Disclaimer
+# Disclaimer
 
-This application is provided for informational, educational, experimental, and/or demonstration purposes only. It is provided “as is” without warranties of any kind, either express or implied.
+AI Faultline is provided for informational, educational, experimental, and/or demonstration purposes only. It is provided “as is” without warranties of any kind, either express or implied.
 
 You are solely responsible for how you install, configure, run, and use this application, including any API keys, third-party services, model providers, cloud services, infrastructure, data, prompts, inputs, outputs, costs, rate limits, usage limits, billing, and consumption associated with its use.
 
@@ -11,4 +11,3 @@ AI-generated outputs may be incomplete, inaccurate, biased, misleading, or unsui
 Do not submit sensitive, confidential, regulated, proprietary, personal, or client data unless you fully understand and accept the risks associated with the model providers, APIs, infrastructure, and configuration you are using.
 
 By using this application, you acknowledge that you are responsible for your own usage, costs, data, decisions, and outcomes.
-

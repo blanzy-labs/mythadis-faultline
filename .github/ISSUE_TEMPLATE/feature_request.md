@@ -8,7 +8,7 @@ assignees: ""
 
 ## Scope Reminder
 
-Faultline v0.1.0 intentionally avoids login, database, prompt history,
+AI Faultline intentionally avoids login, database, prompt history,
 telemetry, server-side storage, and share links.
 
 Do not paste secrets, `.env` contents, private prompts, customer data, or

@@ -2,7 +2,7 @@
 
 ## Demo Purpose
 
-Show how Mythadis Faultline turns a proposal into a structured first-pass risk
+Show how AI Faultline turns a proposal into a structured first-pass risk
 report, challenges it with a second AI, and exports the current result without
 adding accounts or saved history.
 
@@ -10,8 +10,9 @@ adding accounts or saved history.
 
 **0-10 seconds: Introduce it**
 
-"Mythadis Faultline is a local-first AI stress-test tool that finds the crack
-before the collapse. It challenges an idea before time and money are committed."
+"AI Faultline is a local-first AI stress-test tool from Blanzy Labs that finds
+the crack before the collapse. It challenges an idea before time and money are
+committed."
 
 Show the title, tagline, and backend-online indicator.
 
@@ -47,9 +48,9 @@ collapse."
 
 ## 5–8 Minute Walkthrough
 
-1. **Open with the purpose.** Show "Mythadis Faultline" and "Find the crack
-   before the collapse." Explain that this is App #3 in the Mythadis Labs
-   open-source series and is a practical stress-testing tool.
+1. **Open with the purpose.** Show "AI Faultline" and "Find the crack before
+   the collapse." Explain that this is part of the Blanzy Labs AI app family
+   and is a practical stress-testing tool.
 2. **Explain local setup.** Point to the backend status. State that the app runs
    locally by default, while real scans still send data to the selected
    external providers.
@@ -155,5 +156,4 @@ or replaces expert review.
 - Results are not retained by the app unless the user downloads Markdown.
 - Provider data handling still matters because real scans leave the machine.
 - AI analysis is fallible decision support, not guaranteed truth.
-- The books are fiction. The questions are real.
 - Find the crack before the collapse.

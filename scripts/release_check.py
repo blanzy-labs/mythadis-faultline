@@ -7,9 +7,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE_VERSION = "0.1.0"
-RELEASE_NAME = "v0.1.0 - Local Faultline MVP"
-APP_NAME = "Mythadis Faultline"
+RELEASE_VERSION = "0.1.1"
+RELEASE_NAME = "v0.1.1 - Blanzy Labs Standardization Patch"
+APP_NAME = "AI Faultline"
 TAGLINE = "Find the crack before the collapse."
 
 REQUIRED_FILES = [
@@ -23,27 +23,32 @@ REQUIRED_FILES = [
     "frontend/package-lock.json",
     "docs/architecture.md",
     "docs/security.md",
+    "docs/security-and-privacy.md",
     "docs/local-install.md",
+    "docs/troubleshooting.md",
     "docs/demo-script.md",
     "docs/prompt-design.md",
     "docs/sample-report.md",
     "docs/security-notes.md",
     "docs/release-notes-v0.1.0.md",
+    "docs/release-notes/v0.1.1.md",
     "docs/release-checklist.md",
+    "docs/validation/v0.1.1-validation.md",
+    "LICENSE",
     "scripts/security_checks.py",
 ]
 
 README_REQUIREMENTS = [
     APP_NAME,
     TAGLINE,
-    "v0.1.0",
+    "v0.1.1",
     "OpenAI",
     "Gemini",
     "gpt-4.1-mini",
     "gemini-2.5-flash",
     "cp .env.example .env",
     "docker compose up --build",
-    "docs/release-notes-v0.1.0.md",
+    "docs/release-notes/v0.1.1.md",
     "docs/release-checklist.md",
 ]
 
@@ -77,7 +82,7 @@ def main() -> int:
     print(f"- PASS: Release identity is {APP_NAME} {RELEASE_NAME}.")
     print("- PASS: Required release, setup, security, and contributor files exist.")
     print("- PASS: README links release docs and lists supported default models.")
-    print("- PASS: Backend and frontend versions are consistent at 0.1.0.")
+    print("- PASS: Backend and frontend versions are consistent at 0.1.1.")
     print("- PASS: Release docs preserve privacy boundaries and limitations.")
     print("- PASS: Consolidated security checks passed.")
     print("- PASS: No provider keys or network access were required.")
@@ -99,7 +104,7 @@ def check_readme(failures: list[str]) -> None:
 
 def check_release_docs(failures: list[str]) -> None:
     notes = read_required_text(
-        ROOT / "docs" / "release-notes-v0.1.0.md",
+        ROOT / "docs" / "release-notes" / "v0.1.1.md",
         failures,
     )
     checklist = read_required_text(
@@ -114,10 +119,10 @@ def check_release_docs(failures: list[str]) -> None:
 
     if RELEASE_NAME not in notes or RELEASE_NAME not in checklist:
         failures.append(f"Release docs must identify {RELEASE_NAME}.")
-    if "git tag -a v0.1.0" not in checklist:
-        failures.append("Release checklist is missing the human-run tag command.")
-    if "gh release create v0.1.0" not in checklist:
-        failures.append("Release checklist is missing optional GitHub release guidance.")
+    if "No tag movement" not in checklist:
+        failures.append("Release checklist is missing tag safety guidance.")
+    if "No release overwrite" not in checklist:
+        failures.append("Release checklist is missing release safety guidance.")
 
 
 def check_versions(failures: list[str]) -> None:

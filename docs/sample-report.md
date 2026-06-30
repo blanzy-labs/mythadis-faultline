@@ -1,11 +1,11 @@
-# Mythadis Faultline Report
+# AI Faultline Report
 
 > Sample report for documentation/demo purposes only. This is illustrative
 > content, not a live provider result.
 
 ## Metadata
 
-- App: Mythadis Faultline
+- App: AI Faultline
 - Tagline: Find the crack before the collapse.
 - Exported At: 2026-06-14T12:30:00.000Z
 - Scan Mode: business_idea

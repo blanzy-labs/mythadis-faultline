@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.faultline.routes import router as faultline_router
 
-app = FastAPI(title="Mythadis Faultline", version="0.1.0")
+app = FastAPI(title="AI Faultline", version="0.1.1")
 
 app.add_middleware(
     CORSMiddleware,

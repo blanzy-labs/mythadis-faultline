@@ -1,1 +1,1 @@
-"""Mythadis Faultline backend package."""
+"""AI Faultline backend package."""

@@ -2,9 +2,12 @@
 
 ## Security Posture Summary
 
-Mythadis Faultline is a local-first MVP with a deliberately small data surface.
+AI Faultline is a local-first MVP with a deliberately small data surface.
 It has no login, database, prompt history, telemetry, or analytics. It does not
 intentionally store prompts or results on the server.
+
+This page is retained as detailed security notes. The standard security and
+privacy entry point is [docs/security-and-privacy.md](security-and-privacy.md).
 
 Local-first does not mean provider calls stay on your computer. When you run a
 scan, the backend sends your input to the external AI providers you select.
@@ -89,4 +92,5 @@ published on the repository or owner profile. Do not disclose sensitive
 details publicly while a private reporting path is being established.
 
 Contributor implementation rules are documented separately in
-[security-notes.md](security-notes.md).
+[security-notes.md](security-notes.md). See [disclaimer.md](disclaimer.md) for
+the full project disclaimer.

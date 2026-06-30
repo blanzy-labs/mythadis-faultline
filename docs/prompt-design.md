@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Mythadis Faultline uses structured prompts to turn a submitted idea, plan,
+AI Faultline uses structured prompts to turn a submitted idea, plan,
 claim, product decision, or technical design into practical risk analysis and
 validation planning. The tool does not guarantee truth, does not browse the
 web, and does not create citations. It does not store prompts or results.

@@ -34,11 +34,11 @@ export function buildMarkdownReport(
   const models = result.models_used;
 
   return [
-    "# Mythadis Faultline Report",
+    "# AI Faultline Report",
     "",
     "## Metadata",
     "",
-    metadataLine("App", "Mythadis Faultline"),
+    metadataLine("App", "AI Faultline"),
     metadataLine("Tagline", "Find the crack before the collapse."),
     metadataLine("Exported At", exportedAt.toISOString()),
     metadataLine("Scan Mode", result.scan_mode),
@@ -116,7 +116,7 @@ export function buildMarkdownFilename(exportedAt: Date = new Date()): string {
     .replace(/\.\d{3}Z$/, "Z")
     .replace("T", "-")
     .replace("Z", "");
-  return `mythadis-faultline-report-${timestamp}.md`;
+  return `ai-faultline-report-${timestamp}.md`;
 }
 
 function metadataLine(label: string, value: unknown): string {

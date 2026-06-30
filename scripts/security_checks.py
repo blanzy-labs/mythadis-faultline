@@ -30,15 +30,21 @@ DEPENDENCY_FILES = [
 ]
 DOCUMENTATION_REQUIREMENTS = {
     ROOT / "docs" / "architecture.md": ["Faultline workflow"],
+    ROOT / "docs" / "security-and-privacy.md": ["provider", "disclaimer"],
     ROOT / "docs" / "security.md": ["provider"],
     ROOT / "docs" / "local-install.md": ["docker compose up --build"],
+    ROOT / "docs" / "troubleshooting.md": ["Provider Key Is Missing"],
     ROOT / "docs" / "demo-script.md": ["60–90"],
     ROOT / "docs" / "release-notes-v0.1.0.md": [
         "Local Faultline MVP",
         "external providers",
     ],
+    ROOT / "docs" / "release-notes" / "v0.1.1.md": [
+        "Blanzy Labs Standardization Patch",
+        "No functional changes",
+    ],
     ROOT / "docs" / "release-checklist.md": [
-        "Release Commands",
+        "No tag movement",
         "scripts/release_check.py",
     ],
     ROOT / "CONTRIBUTING.md": ["Do not commit .env"],

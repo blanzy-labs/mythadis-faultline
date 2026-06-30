@@ -13,7 +13,7 @@ describe("buildMarkdownReport", () => {
   it("includes metadata, context, models, both reports, and limitations", () => {
     const markdown = buildMarkdownReport(fakeScanResponse, exportedAt);
     const expectedHeadings = [
-      "# Mythadis Faultline Report",
+      "# AI Faultline Report",
       "## Metadata",
       "## Original Input",
       "## Scan Mode",
@@ -105,7 +105,7 @@ describe("buildMarkdownFilename", () => {
   it("creates a timestamped markdown filename with safe characters", () => {
     const filename = buildMarkdownFilename(exportedAt);
 
-    expect(filename).toBe("mythadis-faultline-report-20260614-123000.md");
+    expect(filename).toBe("ai-faultline-report-20260614-123000.md");
     expect(filename).toMatch(/^[a-z0-9-]+\.md$/);
   });
 });

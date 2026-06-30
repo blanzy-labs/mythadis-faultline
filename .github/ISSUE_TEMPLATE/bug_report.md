@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a reproducible problem in Mythadis Faultline
+about: Report a reproducible problem in AI Faultline
 title: "[Bug] "
 labels: bug
 assignees: ""

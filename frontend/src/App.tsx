@@ -59,8 +59,8 @@ function App() {
             MF
           </span>
           <div>
-            <p className="eyebrow">Mythadis Labs / App 03</p>
-            <p className="brand-name">Faultline</p>
+            <p className="eyebrow">Blanzy Labs / AI app family</p>
+            <p className="brand-name">AI Faultline</p>
           </div>
         </div>
         <div className="backend-status" aria-live="polite">
@@ -77,7 +77,7 @@ function App() {
       <section className="hero" aria-labelledby="page-title">
         <div className="hero-copy">
           <p className="hero-index">Faultline analysis / two-pass review</p>
-          <h1 id="page-title">Mythadis Faultline</h1>
+          <h1 id="page-title">AI Faultline</h1>
           <p className="tagline">Find the crack before the collapse.</p>
           <p className="positioning">
             Expose hidden assumptions, pressure points, weak evidence, and

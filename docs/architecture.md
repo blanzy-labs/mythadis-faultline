@@ -1,8 +1,8 @@
-# Mythadis Faultline Architecture
+# AI Faultline Architecture
 
 ## Overview
 
-Mythadis Faultline is a local-first, two-pass AI stress-testing application.
+AI Faultline is a local-first, two-pass AI stress-testing application.
 The React frontend collects an idea, plan, claim, product decision, or
 technical design. The FastAPI backend sends it through a Primary Scanner and
 then an Independent Auditor, returning one structured report to the browser.
@@ -148,8 +148,8 @@ chooses to download it.
 - The frontend stores only the current React state for the active page.
 - The project contains no telemetry, analytics, database, or authentication.
 
-See [security.md](security.md) for user-facing guidance and
-[security-notes.md](security-notes.md) for contributor rules.
+See [security-and-privacy.md](security-and-privacy.md) for user-facing
+guidance and [security-notes.md](security-notes.md) for contributor rules.
 
 ## Local Development Flow
 
